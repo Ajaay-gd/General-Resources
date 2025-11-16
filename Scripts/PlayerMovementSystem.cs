@@ -7,12 +7,14 @@ public class PlayerMovementSystem : MonoBehaviour
     [SerializeField] float jumpForce = 20f;
     InputHandler inputHandler;
     Rigidbody2D rb;
+    PlayerCheckSystem checkSystem;
 
     // Assignment of components needed for movement input (the one we made) and physics (Rigidbody2D)
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         inputHandler = GetComponent<InputHandler>();
+        checkSystem = GetComponent<PlayerCheckSystem>();
         /*GetComponent is self explanatory it checks all the components on the gameObject this script is attached to 
          and assigns it the variable if its there, if no component it found is assigns null(empty)
          (which i promise you will haunt you a few times 😭)
@@ -38,7 +40,7 @@ public class PlayerMovementSystem : MonoBehaviour
         // you would also multiply by Time.deltaTime to make movement frame rate independent
         // but for simplicity we are not doing that here. we would work on that on a later date
 
-        if(inputHandler.jumpInput)
+        if(inputHandler.jumpInput && checkSystem.IsGrounded())
         {
             // Simple jump logic
             rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
@@ -48,5 +50,6 @@ public class PlayerMovementSystem : MonoBehaviour
             
             //Right now you can jump infinitely even if you are not on the ground, we will add ground check logic later to fix that
         }
+        
     }
 }
